@@ -181,6 +181,7 @@ pub fn run(
     let mut app = AppState::default();
     let mut running = true;
     let termination = Arc::new(AtomicBool::new(false));
+    #[cfg(unix)]
     install_signal_flags(&termination)?;
 
     while running && !termination.load(Ordering::Acquire) {
@@ -618,9 +619,4 @@ fn install_signal_flags(termination: &Arc<AtomicBool>) -> Result<(), MdtError> {
         .and_then(|_| signal_hook::flag::register(SIGTERM, Arc::clone(termination)))
         .map(|_| ())
         .map_err(|error| MdtError::Terminal(format!("cannot install signal handler: {error}")))
-}
-
-#[cfg(not(unix))]
-fn install_signal_flags(_termination: &Arc<AtomicBool>) -> Result<(), MdtError> {
-    Ok(())
 }
