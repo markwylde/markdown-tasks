@@ -207,7 +207,10 @@ def package_binary(
     with tempfile.TemporaryDirectory() as temporary:
         bundle = Path(temporary) / f"mdt-{tag}-{target}"
         bundle.mkdir()
-        (bundle / executable_name).write_bytes(binary.read_bytes())
+        bundled_binary = bundle / executable_name
+        bundled_binary.write_bytes(binary.read_bytes())
+        if executable_name == "mdt":
+            bundled_binary.chmod(0o755)
         for name in ("README.md", "LICENSE"):
             (bundle / name).write_bytes((root / name).read_bytes())
         if archive_format == "zip":

@@ -168,6 +168,14 @@ jobs:
             --binary "$BINARY" \
             --format "${{ matrix.format }}" \
             --output-dir dist
+          if [[ "${{ matrix.format }}" == "tar.gz" ]]; then
+            VERIFY_DIR="$RUNNER_TEMP/mdt-verify-${{ matrix.target }}"
+            mkdir -p "$VERIFY_DIR"
+            tar -xzf "dist/mdt-$VERSION-${{ matrix.target }}.tar.gz" -C "$VERIFY_DIR"
+            PACKAGED="$VERIFY_DIR/mdt-$VERSION-${{ matrix.target }}/mdt"
+            test -x "$PACKAGED"
+            "$PACKAGED" --version | grep -F "${VERSION#v}"
+          fi
       - uses: actions/upload-artifact@v7
         with:
           name: mdt-${{ matrix.target }}

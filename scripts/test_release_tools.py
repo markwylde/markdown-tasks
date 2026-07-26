@@ -72,6 +72,10 @@ class FileTests(unittest.TestCase):
                 else:
                     with tarfile.open(archive) as bundle:
                         names = bundle.getnames()
+                        binary_info = next(
+                            member for member in bundle.getmembers() if member.name.endswith("/mdt")
+                        )
+                        self.assertNotEqual(binary_info.mode & 0o111, 0)
                 self.assertTrue(any(name.endswith("/README.md") for name in names))
                 self.assertTrue(any(name.endswith("/LICENSE") for name in names))
                 self.assertTrue(any(name.endswith(("/mdt", "/mdt.exe")) for name in names))
