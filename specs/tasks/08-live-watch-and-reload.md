@@ -7,37 +7,37 @@ changes without freezing or losing useful UI state.
 
 ## Watch infrastructure
 
-- [ ] Define a watcher trait and production `notify` implementation.
-- [ ] Watch the explicit file or directory recursively only in TUI mode.
-- [ ] Filter irrelevant and ignored-path events.
-- [ ] Handle create, modify, remove, rename, overflow, and rescan indications.
-- [ ] Send watcher callbacks through a bounded channel without scanning in callback.
-- [ ] Add a 200 ms quiet-period debounce using an injectable clock.
-- [ ] Implement a single-flight scan worker with one coalesced pending refresh.
-- [ ] Ensure `r` requests immediate work while respecting single-flight behavior.
+- [x] Define a watcher trait and production `notify` implementation.
+- [x] Watch the explicit file or directory recursively only in TUI mode.
+- [x] Filter irrelevant and ignored-path events.
+- [x] Handle create, modify, remove, rename, overflow, and rescan indications.
+- [x] Send watcher callbacks through a bounded channel without scanning in callback.
+- [x] Add a 200 ms quiet-period debounce using an injectable clock.
+- [x] Implement a single-flight scan worker with one coalesced pending refresh.
+- [x] Ensure `r` requests immediate work while respecting single-flight behavior.
 
 ## Refresh behavior
 
-- [ ] Swap in only complete successful snapshots.
-- [ ] Keep the last good snapshot on failure and show a persistent status.
-- [ ] Reconcile list rows, Kanban cards, selection, collapse, filter, search, sort,
+- [x] Swap in only complete successful snapshots.
+- [x] Keep the last good snapshot on failure and show a persistent status.
+- [x] Reconcile list rows, Kanban cards, selection, collapse, filter, search, sort,
       grouping, and viewport positions after refresh.
-- [ ] Show refreshing, updated, up-to-date, watcher-error, and target-missing states.
-- [ ] Recover when a missing target is recreated where the platform watcher permits.
-- [ ] Keep accepting input and resize events during scans.
+- [x] Show refreshing, updated, up-to-date, watcher-error, and target-missing states.
+- [x] Recover when a missing target is recreated where the platform watcher permits.
+- [x] Keep accepting input and resize events during scans.
 
 ## Shutdown
 
-- [ ] Stop accepting refresh requests once shutdown starts.
-- [ ] Drop watcher resources, cancel/join workers, and close channels promptly.
-- [ ] Ignore late worker messages safely.
-- [ ] Restore the terminal when quitting during an active scan.
+- [x] Stop accepting refresh requests once shutdown starts.
+- [x] Drop watcher resources, cancel/join workers, and close channels promptly.
+- [x] Ignore late worker messages safely.
+- [x] Restore the terminal when quitting during an active scan.
 
 ## Verification
 
-- [ ] Drive synthetic watcher/debounce/single-flight tests without real sleeps.
-- [ ] Integration-test create, modify, delete, and rename with temporary directories.
-- [ ] Test an event arriving during a scan produces exactly one follow-up scan.
-- [ ] Test refresh failure followed by recovery.
-- [ ] Test stable selection/collapse after changes and graceful quit mid-refresh.
+- [x] Drive synthetic watcher/debounce/single-flight tests without real sleeps.
+- [x] Integration-test create, modify, delete, and rename with temporary directories.
+- [x] Test an event arriving during a scan produces exactly one follow-up scan.
+- [x] Test refresh failure followed by recovery.
+- [x] Test stable selection/collapse after changes and graceful quit mid-refresh.
 - [ ] Manually verify native watcher behavior on macOS, Linux, and Windows.

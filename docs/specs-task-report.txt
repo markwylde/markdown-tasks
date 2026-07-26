@@ -1,0 +1,247 @@
+98% complete  |  180 done  |  4 remaining  |  7/9 files complete
+10 markdown files scanned in 1 directory
+
+01-foundation-and-cli.md  18/18  100%
+  Group 01 — Foundation and CLI  18/18
+    Repository foundation  5/5
+      [x] Create a Cargo package with `src/lib.rs` and thin `src/main.rs`.
+      [x] Set package metadata, Rust edition, minimum supported Rust version, license,
+      [x] Add `.gitignore`, formatting settings, and a CI workflow for fmt, clippy,
+      [x] Add error types separating invalid input, fatal scan failures, partial scan
+      [x] Establish modules from the architecture spec without filling them with
+    CLI  7/7
+      [x] Add Clap derive definitions for `[PATH]`, `--tui`, repeatable `--ignore`,
+      [x] Default `PATH` to `.` and normalize it without losing the display path.
+      [x] Implement help, version, output-stream, and exit-code behavior.
+      [x] Reject an unsupported explicit file before entering either renderer.
+      [x] Reject `--tui` when stdin or stdout is not an interactive terminal.
+      [x] Honor `NO_COLOR` and explicit color precedence.
+      [x] Dispatch non-TUI mode without reading stdin or constructing a watcher.
+    Terminal safety skeleton  3/3
+      [x] Add a scoped terminal guard that can restore raw mode, alternate screen,
+      [x] Install panic/signal restoration without swallowing the original diagnostic.
+      [x] Prove normal and error teardown with focused tests or a pseudo-terminal test.
+    Verification  3/3
+      [x] Add binary tests for default path, explicit path, help, version, malformed
+      [x] Confirm `cargo run -- --help` names the installed command `mdt`.
+      [x] Document how later task groups plug into the mode dispatcher.
+
+02-task-model-and-markdown-parser.md  20/20  100%
+  Group 02 — Task model and Markdown parser  20/20
+    Model  5/5
+      [x] Define workspace, document, section, task, stats, scan-stats, and warning
+      [x] Make task trees immutable after construction.
+      [x] Implement recursive stats aggregation, completion, remaining, and rounded
+      [x] Implement stable document, section, and task keys with duplicate occurrence
+      [x] Retain source line number, indentation depth, and original source order.
+    Parser  8/8
+      [x] Implement ATX heading recognition for levels 1–6.
+      [x] Implement bullet and ordered checkbox markers with `[ ]`, `[x]`, and `[X]`.
+      [x] Implement task nesting from spaces/tabs and reset it at headings.
+      [x] Build the heading stack correctly when levels repeat or skip.
+      [x] Ignore backtick/tilde fenced-code contents and handle matching fence close.
+      [x] Preserve trimmed labels, including inline Markdown characters and Unicode.
+      [x] Support LF and CRLF without leaking `\r` into labels.
+      [x] Return a valid zero-task document rather than treating it as an error.
+    View-independent ordering  3/3
+      [x] Implement numeric-aware case-insensitive name comparison.
+      [x] Implement progress comparison: percent descending, remaining ascending,
+      [x] Keep sorting outside the parsed model.
+    Verification  4/4
+      [x] Port representative examples from Terminay's parser and E2E tests.
+      [x] Add table-driven fixtures for every syntax and edge case in the feature spec.
+      [x] Add property tests that stats never exceed totals and remaining is exact.
+      [x] Add regression tests for repeated headings/labels and stable keys across
+
+03-discovery-and-snapshots.md  19/19  100%
+  Group 03 — Discovery and snapshots  19/19
+    Target and traversal  8/8
+      [x] Accept a regular supported Markdown file or directory as the scan root.
+      [x] Implement recursive traversal for `.md`, `.markdown`, `.mdown`, and `.mkd`
+      [x] Skip directory symlinks and recursive file symlinks.
+      [x] Apply the complete built-in ignored-directory list.
+      [x] Apply repeatable name and root-relative path ignores.
+      [x] Implement `--no-default-ignore` while retaining explicit ignores.
+      [x] Normalize displayed relative paths to `/` without corrupting native paths.
+      [x] Sort traversal results deterministically and numeric-aware.
+    Snapshot construction  8/8
+      [x] Read and parse supported files outside UI code.
+      [x] Exclude zero-task documents from task-document/file-complete counts while
+      [x] Combine all document stats into aggregate stats.
+      [x] Count scanned directories, ignored directories, Markdown files, task files,
+      [x] Enforce the 16 MiB per-file guard.
+      [x] Decode invalid UTF-8 lossily and attach a path-specific warning.
+      [x] Continue after descendant read/enumeration races and permission failures.
+      [x] Treat an unreadable explicit target as fatal.
+    Verification  3/3
+      [x] Use temporary-directory tests for extension case, nested files, ignores,
+      [x] Test deterministic document order on every supported platform.
+      [x] Build a performance fixture approximating 10,000 files/1,000 Markdown files
+
+04-non-interactive-report.md  18/18  100%
+  Group 04 — Non-interactive report  18/18
+    Projection and rendering  9/9
+      [x] Define a plain-report projection independent of terminal width.
+      [x] Render aggregate percent, done, remaining, and files-complete summary.
+      [x] Render scanned Markdown/directory counts and ignored count when nonzero.
+      [x] Render warnings with normalized relative paths and concise causes.
+      [x] Render every task document with per-file progress.
+      [x] Render heading hierarchy, section progress, task indentation, and source order.
+      [x] Render `[x]` and `[ ]` without implying that output is interactive.
+      [x] Handle empty-label tasks as `(untitled task)`.
+      [x] Render deliberate no-files, no-tasks, and all-complete states.
+    Output behavior  5/5
+      [x] Implement `auto`, `always`, and `never` color behavior.
+      [x] Ensure redirected default output contains no ANSI or cursor-control bytes.
+      [x] Avoid truncating labels and paths in redirected output.
+      [x] Emit exactly one final newline and no debug output.
+      [x] Keep partial warnings compatible with exit code 0.
+    Verification  4/4
+      [x] Add golden fixtures for mixed progress, single file, root tasks, nested
+      [x] Add a process test proving the command exits without reading stdin.
+      [x] Add platform-path normalization tests.
+      [x] Manually verify `mdt specs/tasks` against the feature-plan directory.
+
+05-tui-shell-and-summary.md  20/20  100%
+  Group 05 — TUI shell and summary  20/20
+    Event loop and state  6/6
+      [x] Add Ratatui and select its Crossterm backend.
+      [x] Define the application model, message/event enum, reducer-style state
+      [x] Read keyboard and resize events without blocking future scan/watch messages.
+      [x] Enter the alternate screen only after target validation succeeds.
+      [x] Quit on `q`/`Ctrl-C` and restore every terminal mode.
+      [x] Keep all scanning outside the draw/input path.
+    Responsive shell  7/7
+      [x] Implement title/root/status line, summary, toolbar, content viewport, and
+      [x] Render overall percentage, counts, files complete, and aggregate progress bar.
+      [x] Render scanned files/directories/ignored metadata and current scan state.
+      [x] Implement wide, medium, narrow, and terminal-too-small layouts.
+      [x] Implement semantic theme roles and color-capability fallbacks.
+      [x] Implement Unicode and ASCII glyph sets.
+      [x] Handle rapid resize and zero-area rectangles without panic.
+    States and help  4/4
+      [x] Render initial scanning, no tasks, partial warning, fatal error, and ready
+      [x] Add `?` help overlay with all implemented bindings and a read-only notice.
+      [x] Add `r` as a placeholder manual scan action before watch integration.
+      [x] Preserve underlying selection when opening/closing help.
+    Verification  3/3
+      [x] Add TestBackend buffer snapshots for every responsive width and major state.
+      [x] Add reducer tests for quit, resize, help, and manual refresh messages.
+      [x] Exercise panic/error teardown in a pseudo-terminal or equivalent harness.
+
+06-list-exploration-search-and-sorting.md  25/25  100%
+  Group 06 — List exploration, search, and sorting  25/25
+    Pure projections  8/8
+      [x] Project snapshot documents/sections/tasks into a flat visible-row list.
+      [x] Carry row kind, stable key, parent key, depth, stats, and render metadata.
+      [x] Implement All, Remaining, and Done task predicates.
+      [x] Keep full stats on file/section rows under a filter.
+      [x] Implement unified case-insensitive search across file path, heading ancestry,
+      [x] Reveal matching ancestry during search without changing stored collapse state.
+      [x] Apply recursive Progress and Name sorts without reordering tasks.
+      [x] Produce explicit no-match messages.
+    Interaction  7/7
+      [x] Implement j/k, arrows, page movement, first/last, and non-wrapping bounds.
+      [x] Implement Enter/Space/Right expansion and Left collapse/parent movement.
+      [x] Implement `z` collapse/expand all.
+      [x] Implement `/` search mode, editing keys, Enter, and two-stage Escape behavior.
+      [x] Implement `1`/`2`/`3` filters and `s` sort toggle.
+      [x] Reconcile selection by stable key, then nearest visual index after every
+      [x] Keep the selected row inside the viewport.
+    Rendering  6/6
+      [x] Render file, section, and task row styles with clear nesting.
+      [x] Render per-file/per-section counts and responsive progress tracks.
+      [x] Render completion without relying only on color.
+      [x] Elide long paths/labels safely at terminal cell boundaries.
+      [x] Highlight the full selected row without hiding status.
+      [x] Update toolbar/footer to show filter, sort, search query, and active shortcuts.
+    Verification  4/4
+      [x] Unit test projection combinations, including search plus status filter.
+      [x] Reducer-test every key binding and modal conflict (`q` while searching).
+      [x] Snapshot nested, collapsed, filtered, searching, sorted, selected, and
+      [x] Test stable selection/collapse across a newly inserted unrelated source line.
+
+07-kanban-view.md  18/18  100%
+  Group 07 — Kanban view  18/18
+    Card model  5/5
+      [x] Collect an Ungrouped card for root tasks.
+      [x] Collect one card for every section that directly owns tasks.
+      [x] Include stable key, title, heading breadcrumbs, file metadata, tasks, and
+      [x] Classify Not Started, Started, and Finished exactly from shallow progress.
+      [x] Reuse unified search semantics and Progress/Name sorting.
+    Interaction  5/5
+      [x] Implement `v` List/Kanban toggle while preserving list filter/collapse state.
+      [x] Hide list status filters in Kanban and restore the prior filter on return.
+      [x] Implement visual-order card navigation and scrolling.
+      [x] Implement `f` grouped-by-file boards and retain the setting across reloads.
+      [x] Preserve selection by card key across sort, grouping, resize, and reload.
+    Rendering  5/5
+      [x] Render three labeled columns with card counts, breadcrumbs, titles, and
+      [x] Show filename in the global board and once per lane in grouped-by-file mode.
+      [x] Add deliberate empty-column and no-search-result states.
+      [x] Convert columns to selectable pages on narrow terminals.
+      [x] Make Started/Finished/Not Started distinguishable without color.
+    Verification  3/3
+      [x] Unit test card collection, duplicate headings, root tasks, shallow stats,
+      [x] Reducer-test view toggle, column/card navigation, and file grouping.
+      [x] Snapshot wide, narrow, grouped, empty-column, search, and selected-card views.
+
+08-live-watch-and-reload.md  23/24  96%
+  Group 08 — Live watch and reload  23/24
+    Watch infrastructure  8/8
+      [x] Define a watcher trait and production `notify` implementation.
+      [x] Watch the explicit file or directory recursively only in TUI mode.
+      [x] Filter irrelevant and ignored-path events.
+      [x] Handle create, modify, remove, rename, overflow, and rescan indications.
+      [x] Send watcher callbacks through a bounded channel without scanning in callback.
+      [x] Add a 200 ms quiet-period debounce using an injectable clock.
+      [x] Implement a single-flight scan worker with one coalesced pending refresh.
+      [x] Ensure `r` requests immediate work while respecting single-flight behavior.
+    Refresh behavior  6/6
+      [x] Swap in only complete successful snapshots.
+      [x] Keep the last good snapshot on failure and show a persistent status.
+      [x] Reconcile list rows, Kanban cards, selection, collapse, filter, search, sort,
+      [x] Show refreshing, updated, up-to-date, watcher-error, and target-missing states.
+      [x] Recover when a missing target is recreated where the platform watcher permits.
+      [x] Keep accepting input and resize events during scans.
+    Shutdown  4/4
+      [x] Stop accepting refresh requests once shutdown starts.
+      [x] Drop watcher resources, cancel/join workers, and close channels promptly.
+      [x] Ignore late worker messages safely.
+      [x] Restore the terminal when quitting during an active scan.
+    Verification  5/6
+      [x] Drive synthetic watcher/debounce/single-flight tests without real sleeps.
+      [x] Integration-test create, modify, delete, and rename with temporary directories.
+      [x] Test an event arriving during a scan produces exactly one follow-up scan.
+      [x] Test refresh failure followed by recovery.
+      [x] Test stable selection/collapse after changes and graceful quit mid-refresh.
+      [ ] Manually verify native watcher behavior on macOS, Linux, and Windows.
+
+09-hardening-documentation-and-release.md  19/22  86%
+  Group 09 — Hardening, documentation, and release  19/22
+    Product polish  6/6
+      [x] Audit every screen at wide, medium, narrow, light, dark, colorless, and ASCII
+      [x] Audit long Unicode labels/paths, combining characters, and terminal cell width.
+      [x] Profile the 10,000-file/1,000-Markdown fixture and remove measured bottlenecks.
+      [x] Confirm no scan, parse, or render path panics on malformed input.
+      [x] Confirm every completion/warning/error state is understandable without color.
+      [x] Decide whether mouse scrolling/selection is reliable enough for v0.1.0;
+    Documentation  5/5
+      [x] Write the root README with installation, CLI examples, syntax, extensions,
+      [x] Capture a representative terminal screenshot or recording using the
+      [x] Add `CONTRIBUTING.md` with local checks and golden/snapshot update workflow.
+      [x] Add `CHANGELOG.md` and record v0.1.0 behavior and known limitations.
+      [x] Keep `mdt --help` examples aligned with README and specs.
+    Supply chain and CI  5/5
+      [x] Pin a minimum supported Rust version and test it.
+      [x] Add `cargo deny` policy for advisories, licenses, bans, and sources.
+      [x] Run fmt, clippy with warnings denied, all tests, and release builds in CI.
+      [x] Add cross-platform binary release jobs and checksum generation.
+      [x] Verify the installed artifact is named `mdt` on Unix and `mdt.exe` on Windows.
+    Release acceptance  3/6
+      [x] Run `mdt specs/tasks` and archive the expected plain output.
+      [x] Run `mdt --tui specs/tasks` and verify list, search, filters, sorting, Kanban,
+      [ ] Verify create/modify/delete/rename refresh on every supported platform.
+      [x] Verify stdout/stderr and exit codes in a CI-like non-TTY environment.
+      [ ] Verify clean terminal restoration after normal quit, Ctrl-C, scan error,
+      [ ] Tag v0.1.0 only after all feature-spec acceptance criteria are satisfied.

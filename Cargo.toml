@@ -1,0 +1,45 @@
+[package]
+name = "markdown-tasks"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+description = "A fast Markdown task report and live terminal explorer"
+license = "MIT"
+repository = "https://github.com/mark/markdown-tasks"
+keywords = ["markdown", "tasks", "tui", "cli"]
+categories = ["command-line-utilities"]
+
+[[bin]]
+name = "mdt"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+crossbeam-channel = "0.5"
+crossterm = { version = "0.29", features = ["event-stream"] }
+natord = "1.0"
+notify = "8.2"
+ratatui = "0.30"
+thiserror = "2.0"
+unicode-width = "0.2"
+
+[target.'cfg(unix)'.dependencies]
+signal-hook = "0.3"
+
+[dev-dependencies]
+assert_cmd = "2.0"
+predicates = "3.1"
+proptest = "1.7"
+tempfile = "3.20"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "warn"
+pedantic = "warn"
