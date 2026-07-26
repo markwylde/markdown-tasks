@@ -18,7 +18,7 @@ jobs:
     name: Quality gate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: dtolnay/rust-toolchain@master
@@ -41,7 +41,7 @@ jobs:
       tag: ${{ steps.release.outputs.tag }}
       skip: ${{ steps.release.outputs.skip }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Create or resume semantic release
@@ -87,7 +87,7 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           RELEASE_NOTES_MODEL: deepseek/deepseek-v4-pro
         run: python3 scripts/release_tools.py generate-notes "${{ steps.release.outputs.tag }}"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: steps.release.outputs.skip == 'false'
         with:
           name: release-notes
@@ -129,7 +129,7 @@ jobs:
             format: zip
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ needs.release.outputs.tag }}
       - uses: dtolnay/rust-toolchain@master
@@ -158,7 +158,7 @@ jobs:
             --binary "$BINARY" \
             --format "${{ matrix.format }}" \
             --output-dir dist
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: mdt-${{ matrix.target }}
           path: dist/*
@@ -175,7 +175,7 @@ jobs:
     if: needs.release.outputs.skip == 'false'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-notes
       - name: Publish completed release
