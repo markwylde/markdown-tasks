@@ -5,7 +5,7 @@ edition = "2024"
 rust-version = "1.88"
 description = "A fast Markdown task report and live terminal explorer"
 license = "MIT"
-repository = "https://github.com/mark/markdown-tasks"
+repository = "https://github.com/markwylde/markdown-tasks"
 keywords = ["markdown", "tasks", "tui", "cli"]
 categories = ["command-line-utilities"]
 

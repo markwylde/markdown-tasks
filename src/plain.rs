@@ -24,13 +24,11 @@ impl PlainStats {
 
     #[must_use]
     pub fn percent(self) -> usize {
-        if self.total == 0 {
-            0
-        } else {
-            // Integer arithmetic gives nearest-integer rounding without
-            // floating-point platform differences.
-            (self.completed.saturating_mul(100) + self.total / 2) / self.total
-        }
+        // Integer arithmetic gives nearest-integer rounding without
+        // floating-point platform differences.
+        (self.completed.saturating_mul(100) + self.total / 2)
+            .checked_div(self.total)
+            .unwrap_or(0)
     }
 }
 

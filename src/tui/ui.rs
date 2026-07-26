@@ -55,11 +55,10 @@ impl UiSummary {
 
     #[must_use]
     pub(crate) fn percent(&self) -> usize {
-        if self.total == 0 {
-            0
-        } else {
-            ((self.completed.saturating_mul(100) + self.total / 2) / self.total).min(100)
-        }
+        (self.completed.saturating_mul(100) + self.total / 2)
+            .checked_div(self.total)
+            .unwrap_or(0)
+            .min(100)
     }
 }
 
@@ -701,12 +700,12 @@ fn progress_bar(completed: usize, total: usize, width: usize, theme: &Theme) -> 
     if width == 0 {
         return String::new();
     }
-    let filled = if total == 0 {
-        0
-    } else {
-        completed.saturating_mul(width).saturating_add(total / 2) / total
-    }
-    .min(width);
+    let filled = completed
+        .saturating_mul(width)
+        .saturating_add(total / 2)
+        .checked_div(total)
+        .unwrap_or(0)
+        .min(width);
     format!(
         "{}{}",
         theme.glyphs.progress_full.repeat(filled),

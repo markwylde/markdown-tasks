@@ -1,6 +1,7 @@
 # mdt
 
 [![CI](https://github.com/markwylde/markdown-tasks/actions/workflows/ci.yml/badge.svg)](https://github.com/markwylde/markdown-tasks/actions/workflows/ci.yml)
+[![Release](https://github.com/markwylde/markdown-tasks/actions/workflows/trigger-release.yml/badge.svg)](https://github.com/markwylde/markdown-tasks/actions/workflows/trigger-release.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 `mdt` turns Markdown checkboxes into a fast command-line report or a live,
@@ -35,8 +36,19 @@ Or install directly from GitHub:
 cargo install --git https://github.com/markwylde/markdown-tasks.git
 ```
 
-Release archives, when published, contain a single `mdt` (`mdt.exe` on Windows)
-binary and a checksum.
+Or download a native archive from the
+[latest GitHub release](https://github.com/markwylde/markdown-tasks/releases/latest):
+
+| Platform | Archive target |
+| --- | --- |
+| macOS Apple Silicon | `aarch64-apple-darwin` |
+| macOS Intel | `x86_64-apple-darwin` |
+| Linux ARM64 | `aarch64-unknown-linux-gnu` |
+| Linux x86_64 | `x86_64-unknown-linux-gnu` |
+| Windows x86_64 | `x86_64-pc-windows-msvc` |
+
+Each archive has an adjacent `.sha256` checksum and includes the binary, README,
+and license.
 
 ## Use
 
@@ -140,6 +152,7 @@ cargo fmt --check
 cargo clippy --all-targets --all-features -- -D warnings
 cargo test --all-targets --all-features
 cargo deny check
+python3 -m unittest scripts/test_release_tools.py
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for fixture and snapshot guidance. The
@@ -147,3 +160,9 @@ repository also keeps the
 [large-fixture performance baseline](docs/performance.md), an
 [ANSI terminal interaction recording](docs/mdt-demo.ansi.gz), and the
 [expected report for the project task specs](docs/specs-task-report.txt).
+
+Maintainers can run the **Trigger Release** workflow from GitHub Actions. It
+chooses the next semantic version from conventional commits, asks DeepSeek V4
+Pro through OpenRouter to write release notes from the exact release diff,
+builds five native archives, verifies their versions and checksums, and only
+then publishes the draft release.

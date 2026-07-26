@@ -53,15 +53,12 @@ impl ShallowProgress {
 
     #[must_use]
     pub fn percent(self) -> usize {
-        if self.total == 0 {
-            0
-        } else {
-            // Add half of the denominator to round to the nearest integer.
-            self.completed
-                .saturating_mul(100)
-                .saturating_add(self.total / 2)
-                / self.total
-        }
+        // Add half of the denominator to round to the nearest integer.
+        self.completed
+            .saturating_mul(100)
+            .saturating_add(self.total / 2)
+            .checked_div(self.total)
+            .unwrap_or(0)
     }
 
     #[must_use]

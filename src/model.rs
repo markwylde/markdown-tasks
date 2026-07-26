@@ -49,11 +49,12 @@ impl Stats {
     #[must_use]
     #[allow(clippy::cast_possible_truncation)]
     pub const fn percent(self) -> usize {
-        if self.total == 0 {
-            0
-        } else {
-            // This value is bounded by 100 because completed <= total.
-            ((self.completed as u128 * 100 + self.total as u128 / 2) / self.total as u128) as usize
+        // This value is bounded by 100 because completed <= total.
+        match (self.completed as u128 * 100 + self.total as u128 / 2)
+            .checked_div(self.total as u128)
+        {
+            Some(percent) => percent as usize,
+            None => 0,
         }
     }
 

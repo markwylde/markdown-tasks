@@ -26,15 +26,11 @@ impl RowStats {
 
     #[must_use]
     pub fn percent(self) -> usize {
-        if self.total == 0 {
-            0
-        } else {
-            (self
-                .completed
-                .saturating_mul(100)
-                .saturating_add(self.total / 2))
-                / self.total
-        }
+        self.completed
+            .saturating_mul(100)
+            .saturating_add(self.total / 2)
+            .checked_div(self.total)
+            .unwrap_or(0)
     }
 }
 
