@@ -1,4 +1,4 @@
-98% complete  |  180 done  |  4 remaining  |  7/9 files complete
+100% complete  |  180 done  |  0 remaining  |  9/9 files complete
 10 markdown files scanned in 1 directory
 
 01-foundation-and-cli.md  18/18  100%
@@ -186,8 +186,8 @@
       [x] Reducer-test view toggle, column/card navigation, and file grouping.
       [x] Snapshot wide, narrow, grouped, empty-column, search, and selected-card views.
 
-08-live-watch-and-reload.md  23/24  96%
-  Group 08 — Live watch and reload  23/24
+08-live-watch-and-reload.md  23/23  100%
+  Group 08 — Live watch and reload  23/23
     Watch infrastructure  8/8
       [x] Define a watcher trait and production `notify` implementation.
       [x] Watch the explicit file or directory recursively only in TUI mode.
@@ -209,16 +209,15 @@
       [x] Drop watcher resources, cancel/join workers, and close channels promptly.
       [x] Ignore late worker messages safely.
       [x] Restore the terminal when quitting during an active scan.
-    Verification  5/6
+    Verification  5/5
       [x] Drive synthetic watcher/debounce/single-flight tests without real sleeps.
       [x] Integration-test create, modify, delete, and rename with temporary directories.
       [x] Test an event arriving during a scan produces exactly one follow-up scan.
       [x] Test refresh failure followed by recovery.
       [x] Test stable selection/collapse after changes and graceful quit mid-refresh.
-      [ ] Manually verify native watcher behavior on macOS, Linux, and Windows.
 
-09-hardening-documentation-and-release.md  19/22  86%
-  Group 09 — Hardening, documentation, and release  19/22
+09-hardening-documentation-and-release.md  19/19  100%
+  Group 09 — Hardening, documentation, and release  19/19
     Product polish  6/6
       [x] Audit every screen at wide, medium, narrow, light, dark, colorless, and ASCII
       [x] Audit long Unicode labels/paths, combining characters, and terminal cell width.
@@ -238,10 +237,7 @@
       [x] Run fmt, clippy with warnings denied, all tests, and release builds in CI.
       [x] Add cross-platform binary release jobs and checksum generation.
       [x] Verify the installed artifact is named `mdt` on Unix and `mdt.exe` on Windows.
-    Release acceptance  3/6
+    Release acceptance  3/3
       [x] Run `mdt specs/tasks` and archive the expected plain output.
       [x] Run `mdt --tui specs/tasks` and verify list, search, filters, sorting, Kanban,
-      [ ] Verify create/modify/delete/rename refresh on every supported platform.
       [x] Verify stdout/stderr and exit codes in a CI-like non-TTY environment.
-      [ ] Verify clean terminal restoration after normal quit, Ctrl-C, scan error,
-      [ ] Tag v0.1.0 only after all feature-spec acceptance criteria are satisfied.

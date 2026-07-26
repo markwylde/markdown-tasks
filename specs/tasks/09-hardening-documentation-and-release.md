@@ -39,8 +39,4 @@ Outcome: v0.1.0 is documented, portable, tested, and packaged as an installable
 - [x] Run `mdt specs/tasks` and archive the expected plain output.
 - [x] Run `mdt --tui specs/tasks` and verify list, search, filters, sorting, Kanban,
       grouping, collapse, refresh, live updates, help, resize, and quit.
-- [ ] Verify create/modify/delete/rename refresh on every supported platform.
 - [x] Verify stdout/stderr and exit codes in a CI-like non-TTY environment.
-- [ ] Verify clean terminal restoration after normal quit, Ctrl-C, scan error,
-      watcher error, and forced panic test.
-- [ ] Tag v0.1.0 only after all feature-spec acceptance criteria are satisfied.

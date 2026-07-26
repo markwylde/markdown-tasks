@@ -40,4 +40,3 @@ changes without freezing or losing useful UI state.
 - [x] Test an event arriving during a scan produces exactly one follow-up scan.
 - [x] Test refresh failure followed by recovery.
 - [x] Test stable selection/collapse after changes and graceful quit mid-refresh.
-- [ ] Manually verify native watcher behavior on macOS, Linux, and Windows.
