@@ -52,6 +52,16 @@ jobs:
         run: |
           set -euo pipefail
           TAG="$(git tag --points-at HEAD --list 'v[0-9]*' --sort=-version:refname | head -1)"
+          if [[ -z "$TAG" ]]; then
+            LATEST_TAG="$(git tag --list 'v[0-9]*' --sort=-version:refname | head -1)"
+            if [[ -n "$LATEST_TAG" ]] && gh release view "$LATEST_TAG" >/dev/null 2>&1; then
+              LATEST_DRAFT="$(gh release view "$LATEST_TAG" --json isDraft --jq .isDraft)"
+              if [[ "$LATEST_DRAFT" == "true" ]]; then
+                TAG="$LATEST_TAG"
+                echo "Resuming unfinished draft release $TAG."
+              fi
+            fi
+          fi
           if [[ -n "$TAG" ]]; then
             if gh release view "$TAG" >/dev/null 2>&1; then
               DRAFT="$(gh release view "$TAG" --json isDraft --jq .isDraft)"
@@ -178,13 +188,22 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: release-notes
+      - name: Verify completed draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          test "$(gh release view "${{ needs.release.outputs.tag }}" --json assets --jq '.assets | length')" -eq 10
+          test "$(gh release view "${{ needs.release.outputs.tag }}" --json isDraft --jq .isDraft)" = true
       - name: Publish completed release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: gh release edit "${{ needs.release.outputs.tag }}" --notes-file RELEASE.md --draft=false
-      - name: Verify published assets
+      - name: Verify published release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
-          test "$(gh release view "${{ needs.release.outputs.tag }}" --json assets --jq '.assets | length')" -eq 10
+          test "$(gh release view "${{ needs.release.outputs.tag }}" --json isDraft --jq .isDraft)" = false
           gh release view "${{ needs.release.outputs.tag }}" --json url --jq .url
